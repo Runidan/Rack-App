@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require_relative 'time_format'
 
 class App
-
   def call(env)
     @status = 200
     @body = ["Error\n"]
@@ -9,19 +10,18 @@ class App
     [@status, {}, @body]
   end
 
-private
+  private
 
   def make_answer(env)
     request = Rack::Request.new(env)
-    if request_valid?(request)
-      time_format = TimeFormat.new(request.params['format'])
-      @status = time_format.status
-      @body = time_format.body
-    end
+    return unless request_valid?(request)
+
+    time_format = TimeFormat.new(request.params['format'])
+    @status = time_format.status
+    @body = time_format.body
   end
 
   def request_valid?(request)
     request.request_method == 'GET' && request.params['format']
   end
-
 end
