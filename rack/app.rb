@@ -3,9 +3,9 @@ require_relative 'time_format'
 class App
 
   def call(env)
-    @status = 404
+    @status = 200
     @header = { 'Content-Type' => 'text/plain' }
-    @body = ["Error\n"]
+    @body = ["Errore\n"]
     make_answer(env)
     [@status, @header, @body]
   end
@@ -22,7 +22,7 @@ private
   end
 
   def request_valid?(request)
-    request.path == '/time' && request.request_method == 'GET' && request.params['format']
+    request.request_method == 'GET' && request.params['format']
   end
 
 end
