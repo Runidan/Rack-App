@@ -4,10 +4,9 @@ class App
 
   def call(env)
     @status = 200
-    @header = { 'Content-Type' => 'text/plain' }
-    @body = ["Errore\n"]
+    @body = ["Error\n"]
     make_answer(env)
-    [@status, @header, @body]
+    [@status, {}, @body]
   end
 
 private
