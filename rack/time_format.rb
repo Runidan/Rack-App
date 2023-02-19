@@ -3,7 +3,7 @@
 class TimeFormat
   RIGHT_FORMATES = %w[year month day hour minute second].freeze
 
-  attr_reader :status, :body
+  attr_reader :body
 
   def initialize(formats)
     @formats = formats
