@@ -7,8 +7,8 @@ class App
     request = Rack::Request.new env
     res = Rack::Response.new
     if request_valid?(request)
-      time_formater = TimeFormat.new request.params['format']
-      res.status = time_formater.status
+      time_formater = TimeFormat.new request.params['format'].split(',')
+      res.status = time_formater.format_valid? ? 200 : 400
       res.write time_formater.body
     end
     res.finish

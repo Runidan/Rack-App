@@ -6,12 +6,16 @@ class TimeFormat
   attr_reader :status, :body
 
   def initialize(formats)
-    @formats = formats.split(',')
-    if wrong_formats.any?
-      error_formats
-    else
+    @formats = formats
+    if format_valid?
       answer
+    else
+      error_formats
     end
+  end
+
+  def format_valid?
+    wrong_formats.empty?
   end
 
   private
@@ -21,13 +25,11 @@ class TimeFormat
   end
 
   def error_formats
-    @status = 400
     @body = "Unknown time format #{@wrong_formats}\n"
   end
 
   def answer
-    @status = 200
     time_now = Time.now
-    @body = @formats.map { |format| time_now.send(format.to_sym) }.join('-') + "\n"
+    @body = "#{@formats.map { |format| time_now.send(format.to_sym) }.join('-')}\n"
   end
 end
