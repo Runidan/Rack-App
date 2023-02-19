@@ -22,13 +22,12 @@ class TimeFormat
 
   def error_formats
     @status = 400
-    @body = ["Unknown time format #{@wrong_formats}\n"]
+    @body = "Unknown time format #{@wrong_formats}\n"
   end
 
   def answer
     @status = 200
     time_now = Time.now
-    time_params = @formats.map { |format| time_now.send(format.to_sym) }.join('-')
-    @body = ["#{time_params}\n"]
+    @body = @formats.map { |format| time_now.send(format.to_sym) }.join('-') + "\n"
   end
 end

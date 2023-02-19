@@ -4,24 +4,19 @@ require_relative 'time_format'
 
 class App
   def call(env)
-    @status = 200
-    @body = ["Error\n"]
-    make_answer(env)
-    [@status, {}, @body]
+    request = Rack::Request.new env
+    res = Rack::Response.new
+    if request_valid?(request)
+      time_formater = TimeFormat.new request.params['format']
+      res.status = time_formater.status
+      res.write time_formater.body
+    end
+    res.finish
   end
 
   private
 
-  def make_answer(env)
-    request = Rack::Request.new(env)
-    return unless request_valid?(request)
-
-    time_format = TimeFormat.new(request.params['format'])
-    @status = time_format.status
-    @body = time_format.body
-  end
-
   def request_valid?(request)
-    request.request_method == 'GET' && request.params['format']
+    request.get? && request.params['format']
   end
 end
