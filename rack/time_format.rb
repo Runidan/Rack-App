@@ -30,6 +30,11 @@ class TimeFormat
 
   def answer
     time_now = Time.now
-    @body = "#{@formats.map { |format| time_now.send(format.to_sym) }.join('-')}\n"
+    time_data = @formats.map do |format|
+      format = :min if format == 'minute'
+      format = :sec if format == 'second'
+      time_now.send(format.to_sym)
+    end
+    @body = "#{time_data.join('-')}\n"
   end
 end
