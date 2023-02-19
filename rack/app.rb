@@ -1,25 +1,22 @@
+# frozen_string_literal: true
+
+require_relative 'time_format'
+
 class App
-
   def call(env)
-    perform_request
-    [status, header, body]
+    request = Rack::Request.new env
+    res = Rack::Response.new
+    if request_valid?(request)
+      time_formater = TimeFormat.new request.params['format'].split(',')
+      res.status = time_formater.format_valid? ? 200 : 400
+      res.write time_formater.body
+    end
+    res.finish
   end
 
-private
+  private
 
-  def perform_request
-    sleep rand(2..3)
-  end
-
-  def status
-    200
-  end
-
-  def header
-    { 'Content-Type' => 'text/plain' }
-  end
-
-  def body
-    ["Welcome aboard\n"]
+  def request_valid?(request)
+    request.get? && request.params['format']
   end
 end
